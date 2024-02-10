@@ -99,6 +99,12 @@ SELECT industry, ROUND(AVG(employees)) AS avg_employees
 SELECT company_name, MAX(paid_time_off_days) AS paid_time_off_days
 FROM fortune_companies;
 
+# Which companies have healthcare benefits *and* at least 20 paid time off days?
+SELECT company_name
+  FROM fortune_companies
+ WHERE paid_time_off_days>20
+   AND healthcare_benefits=1;
+
 # which company has most weeks allowed for maternity leave
 SELECT company_name, MAX(maternity_leave_weeks) AS maternity_leave_weeks
 FROM fortune_companies;
@@ -108,3 +114,24 @@ SELECT company_name, avg_employee_tenure
   FROM fortune_companies
  ORDER BY avg_employee_tenure DESC
  LIMIT 1;
+
+# Assign all the companies as "mother friendly workplace", "acceptable", or "not mother friendly" based on the maternity leave offered. 
+SELECT company_name, maternity_leave_weeks,
+  CASE 
+  WHEN maternity_leave_weeks >= 10 THEN 'mother friendly workplace'
+  WHEN maternity_leave_weeks >= 8 THEN 'acceptable'
+  ELSE 'not mother friendly'
+   END as mother_friendliness
+  FROM fortune_companies;
+
+# Which industries have an average revenue of at least $200 Billion, and what are their avg revenues?
+SELECT industry, ROUND(AVG(revenue),1) as avg_revenue_billions
+  FROM fortune_companies
+ GROUP BY industry
+HAVING avg_revenue_billions>=200
+ ORDER BY ROUND(AVG(revenue),1) DESC;
+
+# Which company in the Retail industry has the least revenue, and what's their revenue? 
+SELECT company_name, min(revenue) AS revenue
+  FROM fortune_companies
+ WHERE industry = 'Retail';
