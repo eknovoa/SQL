@@ -87,4 +87,13 @@ SELECT MIN("release_year") AS "oldest_movie"
   FROM "netflix_titles_info"
  WHERE "type" = 'Movie';
 
+#OR
+SELECT title, release_year
+  FROM "netflix_titles_info"
+ WHERE type = 'Movie' AND release_year <= (
+SELECT MIN(release_year)
+  FROM "netflix_titles_info"
+ WHERE type = 'Movie'
+);
+
 
