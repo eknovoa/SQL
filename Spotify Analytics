@@ -27,3 +27,80 @@ time_signature integer NOT NULL
 # Then I inserted the Spotify Data .csv into the table.
 
 # Next, I explored the data using the following SQL. 
+
+# Creating a CTE
+WITH tempTable AS (
+    SELECT artist_name, AVG(popularity) AS avg_popularity
+      FROM Spotifydata
+     GROUP BY artist_name
+)
+
+# Labeling which artists are Top Stars based on their average popularity
+SELECT artist_name, avg_popularity, 'Top Star' AS tag
+  FROM tempTable
+ WHERE avg_popularity >= 90;
+
+# Observe data
+SELECT *
+  FROM BIT_DB.Spotifydata
+ LIMIT 20;
+
+# Order spotify data by  artists
+SELECT *
+  FROM BIT_DB.Spotifydata
+ ORDER BY artist_name;
+
+# How many songs does each artist have?
+SELECT artist_name, COUNT(id) AS num_of_songs
+  FROM BIT_DB.Spotifydata
+ GROUP BY artist_name
+ ORDER BY artist_name;
+
+# Average: 86.8
+SELECT AVG(popularity)
+  FROM BIT_DB.Spotifydata;
+
+# Label whether artists are meeting the average popularity ratings, or below or above the average
+SELECT artist_name, ROUND(AVG(popularity),1) AS artist_avg,
+  CASE
+  WHEN ROUND(AVG(popularity),1) < 86.8 THEN "Below Average"
+  WHEN ROUND(AVG(popularity),1) = 86.8 THEN "Exactly Average"
+  ELSE "Better Than Average"
+   END AS artist_performance 
+  FROM BIT_DB.Spotifydata
+ GROUP BY artist_name;
+
+# Longest Song, Artist Name, and its popularity compared to average of 86.8
+SELECT artist_name, MAX(duration_ms) AS song_length, ROUND(AVG(popularity),1) AS artist_avg,
+  CASE
+  WHEN ROUND(AVG(popularity),1) < 86.8 THEN "Below Average"
+  WHEN ROUND(AVG(popularity),1) = 86.8 THEN "Exactly Average"
+  ELSE "Better Than Average"
+   END AS artist_performance 
+  FROM BIT_DB.Spotifydata
+ GROUP BY artist_name
+ ORDER BY song_length DESC
+ LIMIT 1;
+
+# Shortest Song, Artist Name, and its popularity compared to average of 86.8
+SELECT artist_name, MIN(duration_ms) AS song_length, ROUND(AVG(popularity),1) AS artist_avg,
+  CASE
+  WHEN ROUND(AVG(popularity),1) < 86.8 THEN "Below Average"
+  WHEN ROUND(AVG(popularity),1) = 86.8 THEN "Exactly Average"
+  ELSE "Better Than Average"
+   END AS artist_performance 
+  FROM BIT_DB.Spotifydata
+ GROUP BY artist_name
+ ORDER BY song_length ASC
+ LIMIT 1;
+
+# Looking at danceability of song and the artist average compared to total average
+SELECT artist_name, ROUND(danceability*100,2) AS danceability_percent, ROUND(AVG(popularity),1) AS artist_avg,
+  CASE
+  WHEN ROUND(AVG(popularity),1) < 86.8 THEN "Below Average"
+  WHEN ROUND(AVG(popularity),1) = 86.8 THEN "Exactly Average"
+  ELSE "Better Than Average"
+   END AS artist_performance 
+  FROM BIT_DB.Spotifydata
+ GROUP BY artist_name
+ ORDER BY danceability_percent DESC;
