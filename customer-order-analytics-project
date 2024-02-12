@@ -1,25 +1,25 @@
-#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
+# In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
 
 
-#How many orders were placed in January?
+# How many orders were placed in January?
 SELECT COUNT(orderID)
   FROM BIT_DB.JanSales
  WHERE length(orderID)=6 AND orderID <> 'Order ID';
 
 
-#How many of those orders were for an iPhone?
+# How many of those orders were for an iPhone?
 SELECT COUNT(orderID)
   FROM BIT_DB.JanSales
  WHERE Product = 'iPhone' AND length(orderID)=6 AND orderID <> 'OrderID';
 
-#Select the customer account numbers for all the orders that were placed in February.
+# Select the customer account numbers for all the orders that were placed in February.
 SELECT DISTINCT c.acctnum
   FROM BIT_DB.customers AS c
  INNER JOIN BIT_DB.FebSales AS feb
     ON c.order_id = feb.orderID
  WHERE length(orderID)=6 AND orderID <> 'OrderID';
 
-#Which product was the cheapest one sold in January, and what was the price?
+# Which product was the cheapest one sold in January, and what was the price?
 SELECT DISTINCT Product, MIN(price)
   FROM BIT_DB.JanSales
  WHERE length(orderID)=6 AND orderID <> 'OrderID'
@@ -27,20 +27,26 @@ SELECT DISTINCT Product, MIN(price)
  ORDER BY MIN(price) ASC
  LIMIT 1;
 
-#What is the total revenue for each product sold in January?
+# What is the total revenue for each product sold in January?
 SELECT Product, ROUND(SUM(Quantity)*price,2) AS total_revenue
   FROM BIT_DB.JanSales
  GROUP BY Product;
 
-#Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+# Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
 SELECT Product, SUM(Quantity) AS total_quantity, SUM(Quantity)*price AS total_revenue
   FROM BIT_DB.FebSales
  WHERE location='548 Lincoln St, Seattle, WA 98101' AND length(OrderID)=6 AND orderID <> 'Order ID'
  GROUP BY Product;
 
---How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+# How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
 SELECT COUNT(DISTINCT acctnum) AS num_customers, ROUND(AVG(feb.Quantity*feb.price),2) AS avg_spent
   FROM BIT_DB.FebSales AS feb
   LEFT JOIN BIT_DB.customers AS c
     ON feb.orderID = c.order_id
  WHERE feb.Quantity > 2 AND length(orderID)=6 AND orderID <> 'Order ID';
+
+# List all the products sold in Los Angeles in February, and include how many of each were sold.
+SELECT DISTINCT Product, SUM(Quantity) AS total_quantity
+  FROM BIT_DB.FebSales
+ WHERE location LIKE '%Los Angeles%'
+ GROUP BY Product;
