@@ -45,7 +45,7 @@ SELECT ROUND(AVG(income),2) AS avg_income_camp_5_accepted
 FROM campaign_table
 WHERE accepted_camp_5 = true;
 
--- The average income of customers who accepte the most recent campaign 5 is $82,352.83
+-- Answer: The average income of customers who accepte the most recent campaign 5 is $82,352.83
 
 -- Which purchase channel had the highest number of purchases?
 SELECT SUM(num_discount_purch) AS total_purch_discount,
