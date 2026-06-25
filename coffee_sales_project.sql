@@ -1,4 +1,13 @@
+-- Data Source: https://www.kaggle.com/datasets/ahmedmohamed2003/cafe-sales-dirty-data-for-cleaning-training
+
+
 -- TABLE CREATION AND IMPORTING DATA
+
+/*
+Initially, I had to create the table and set all of the data types to be VARCHAR(255) so that I could import
+the data into SQL without errors. After the data was cleaned, I used update queries to set the correct data types
+to columns: quantity, price_per_unit, total_spent, and transaction_date.
+*/
 
 CREATE TABLE coffee_sales (
 	transaction_id VARCHAR(255) PRIMARY KEY,
@@ -11,8 +20,8 @@ CREATE TABLE coffee_sales (
 	transaction_date VARCHAR(255)
 );
 
-
-COPY coffee_sales FROM '/Users/erinnovoa/Desktop/Projects/github/eknovoa/Data Cleaning/SQL/dirty_cafe_sales.csv'
+-- insert the location of this file on your local desktop
+COPY coffee_sales FROM 'pathway_to_file/dirty_cafe_sales.csv'
 WITH (FORMAT CSV, HEADER, DELIMITER ',');
 
 
