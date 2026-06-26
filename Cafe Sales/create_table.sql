@@ -27,8 +27,8 @@ SELECT *
 SELECT COUNT(*)
   FROM coffee_sales;
 
--- verifying 10,000 unique transaction_ids
-SELECT COUNT(transaction_id)
-  FROM coffee_sales
- WHERE transaction_id LIKE 'TXN%';
+-- create backup copy of table
+CREATE TABLE coffee_sales_backup AS
+SELECT *
+  FROM coffee_sales;
 
