@@ -147,7 +147,7 @@ ALTER TABLE coffee_sales ALTER COLUMN transaction_date SET DATA TYPE DATE USING 
 ALTER TABLE coffee_sales ADD COLUMN category VARCHAR(255);
 
 UPDATE coffee_sales
-SET category = 'Beverage'
+SET category = 'Beverages'
 WHERE item IN ('Juice', 'Coffee', 'Smoothie', 'Tea');
 
 UPDATE coffee_sales
